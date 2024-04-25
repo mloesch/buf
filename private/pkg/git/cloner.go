@@ -167,6 +167,7 @@ func (c *cloner) CloneToBucket(
 		"--git-dir="+bareDir.AbsPath(),
 		"fetch",
 		"--depth", depthArg,
+		"--tags",
 		bufCloneOrigin,
 		fetchRef,
 	)

@@ -116,6 +116,16 @@ func TestGitCloner(t *testing.T) {
 		assert.True(t, errors.Is(err, fs.ErrNotExist))
 	})
 
+	t.Run("tag_as_ref", func(t *testing.T) {
+		readBucket := readBucketForName(ctx, t, runner, workDir, 2, NewRefName("remote-tag"), false)
+
+		content, err := storage.ReadPath(ctx, readBucket, "test.proto")
+		require.NoError(t, err)
+		assert.Equal(t, "// commit 4", string(content))
+		_, err = readBucket.Stat(ctx, "nonexistent")
+		assert.True(t, errors.Is(err, fs.ErrNotExist))
+	})
+
 	t.Run("branch_and_main_ref", func(t *testing.T) {
 		t.Parallel()
 		readBucket := readBucketForName(ctx, t, runner, workDir, 2, NewRefNameWithBranch("HEAD~", "main"), false)
